@@ -14,8 +14,8 @@ Usage
 Example
 -------
 
-<?php
-  include 'Event.php';
-  $alerter = new Event();
-  $resposes = $alerter->send('db', 'Test Event', array('Event' => 'Happened'));
-?>
+	<?php
+		include 'Event.php';
+		$alerter = new Event();
+		$resposes = $alerter->send('db', 'Test Event', array('Event' => 'Happened'));
+	?>
