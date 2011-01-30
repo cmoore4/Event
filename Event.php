@@ -69,38 +69,52 @@ class Event {
 	 * @param string $ini The path to the config ini file
 	 * @return void
 	 */
-	public function Event($ini = 'event.ini'){
+	public function __construct($ini = 'event.ini'){
 		
 		if (!@file_exists($ini)){ return "Error: Invalid ini file name or path"; }
 		$config = parse_ini_file($ini, True);
+		
+		$this->parse_db($config['database']);
+		$this->parse_im($config['IM']);
+		$this->parse_phone($config['SMS']);
+		$this->parse_email($config['email']);
 
-		$this->db_string = $config['database']['driver'] .
-        					':host=' . $config['database']['host'] .
-        					((!empty($config['database']['port'])) ? (';port=' . $config['database']['port']) : '') .
-        					';dbname=' . $config['database']['name'];
-        $this->db_user = $config['database']['user'];
-        $this->db_pass = $config['database']['password'];
-        $this->db_table = $config['database']['table'];
-        $this->db_table2 = $config['database']['table2'];
+	}
 
-        $this->im_user = $config['IM']['sender'];
-        $this->im_pass = $config['IM']['password'];
-        $this->im_recips = explode(',', $config['IM']['recipients']);
+	private function parse_db($config){
+		$this->db_string = $config['driver'] .
+        					':host=' . $config['host'] .
+        					((!empty($config['port'])) ? (';port=' . $config['port']) : '') .
+        					';dbname=' . $config['name'];
+        $this->db_user = $config['user'];
+        $this->db_pass = $config['password'];
+        $this->db_table = $config['table'];
+        $this->db_table2 = $config['table2'];
+    }
+
+    private function parse_im($config){
+        $this->im_user = $config['sender'];
+        $this->im_pass = $config['password'];
+        $this->im_recips = explode(',', $config['recipients']);
         $this->im_recips = array_map('trim', $this->im_recips);
+    }
 
-        $this->phone_numbers = explode(',', $config['SMS']['numbers']);
+    private function parse_phone($config){
+        $this->phone_numbers = explode(',', $config['numbers']);
         $this->phone_numbers = array_map('trim', $this->phone_numbers);
+    }
 
-        $this->email_recips = explode(',', $config['email']['recipients']);
+    private function parse_email($config){
+        $this->email_recips = explode(',', $config['recipients']);
         $this->email_recips = array_map('trim', $this->email_recips);
-        $this->smtp = $config['email']['SMTP'];
-        $this->email_prefix = $config['email']['subject_prefix'];
-        $this->email_user = $config['email']['user'];
-        $this->email_pass = $config['email']['password'];
-        $this->email_host = $config['email']['host'];
-        $this->email_from = $config['email']['sender'];
-        $this->email_from_name = $config['email']['sender_name'];
-        $this->email_port = $config['email']['port'];
+        $this->smtp = $config['SMTP'];
+        $this->email_prefix = $config['subject_prefix'];
+        $this->email_user = $config['user'];
+        $this->email_pass = $config['password'];
+        $this->email_host = $config['host'];
+        $this->email_from = $config['sender'];
+        $this->email_from_name = $config['sender_name'];
+        $this->email_port = $config['port'];
 	}
 
 	/**

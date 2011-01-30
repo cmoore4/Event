@@ -8,7 +8,7 @@ class Monitor{
 	 * At this point, constructor is empty
 	 * @return void
 	 */
-	public function Monitor(){}
+	public function __construct(){}
 	
 	/**
 	 * Add a host to the monitor
